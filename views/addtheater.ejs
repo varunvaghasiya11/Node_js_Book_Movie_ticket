@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Theater</title>
+</head>
+<body>
+    <%- include('../partials/header') %>
+    <div class="container py-5">
+        <h2 class="text-center mb-5 fw-bold"><span class="text-primary">Add</span> Theater</h2>
+        <form action="/addtheater" method="post">
+            <div class="mb-3">
+                <label for="title" class="form-label text-secondary">Add Theater</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="location" class="form-label text-secondary">location</label>
+                <input type="url" class="form-control" id="location" name="location" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Theater</button>
+            <a href="/admin" class="btn btn-primary">cancel</a>
+        </form>
+    </div>
+    <%- include('../partials/footer') %>
+</body>
+</html>

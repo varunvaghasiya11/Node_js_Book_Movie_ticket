@@ -1,0 +1,60 @@
+<%- include('../partials/header') %>
+
+    <div class="container py-5">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin" class="text-secondary text-decoration-none">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active text-primary" aria-current="page">
+                    <%= movie.title %>
+                </li>
+            </ol>
+        </nav>
+
+        <div class="row mt-4">
+            <div class="col-md-4 mb-4 mb-md-0">
+                <img src="<%= movie.image %>" class="movie-poster-large rounded shadow-lg border border-secondary"
+                    alt="<%= movie.title %>">
+            </div>
+            <div class="col-md-8">
+                <h1 class="display-4 fw-bold mb-3">
+                    <%= movie.title %>
+                </h1>
+                <div class="d-flex align-items-center mb-4">
+                    <span class="badge bg-warning text-dark fs-6 me-3">IMDb <%= movie.rating %></span>
+                    <span class="text-secondary">
+                        <%= movie.runtime_h %>h <%= movie.runtime_m %>m &bull; <%= movie.genre %> &bull; 2026
+                    </span>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="mb-3 text-white">Storyline</h4>
+                    <p class="lead text-secondary text-opacity-75">
+                        <%= movie.description %>
+                    </p>
+                </div>
+
+                <div class="row mb-5">
+                    <div class="col-md-6 mb-3">
+                        <div class="p-3 bg-black rounded border border-secondary h-100">
+                            <small class="text-secondary d-block mb-1">Ticket Price</small>
+                            <span class="h4 text-primary">₹<%= movie.price.toFixed(2) %></span>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mb-3 text-white">Admin Actions</h4>
+                <div class="d-flex gap-3">
+                    <a href="/editmovie/<%= movie._id %>" class="btn btn-outline-primary btn-lg flex-grow-1">
+                        <i class="bi bi-pencil-square me-2"></i>Edit Movie
+                    </a>
+                    <a href="/deletemovie/<%= movie._id %>" class="btn btn-outline-danger btn-lg flex-grow-1">
+                        <i class="bi bi-trash me-2"></i>Delete Movie
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>

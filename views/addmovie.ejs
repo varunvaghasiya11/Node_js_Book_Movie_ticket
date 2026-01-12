@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Movie</title>
+</head>
+
+<body>
+    <%- include('../partials/header') %>
+        <div class="container py-5 d-flex justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <h2 class="text-center mb-5 fw-bold"><span class="text-primary">Add</span> Movie</h2>
+                <form action="/addmovie" method="post" class="p-4 border border-secondary rounded bg-black shadow">
+                    <div class="mb-3">
+                        <label for="title" class="form-label text-secondary">Title</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label text-secondary">Image URL</label>
+                        <input type="url" class="form-control" id="image" name="image" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label text-secondary">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="genre" class="form-label text-secondary">Genre</label>
+                        <input type="text" class="form-control" id="genre" name="genre" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="rating" class="form-label text-secondary">Rating</label>
+                            <input type="number" step="0.1" class="form-control" id="rating" min="0" max="10"
+                                name="rating" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="price" class="form-label text-secondary">Price</label>
+                            <input type="number" class="form-control" id="price" min="100" name="price" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="runtime_h" class="form-label text-secondary">Hours</label>
+                            <input type="number" class="form-control" id="runtime_h" name="runtime_h" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="runtime_m" class="form-label text-secondary">Minutes</label>
+                            <input type="number" class="form-control" id="runtime_m" name="runtime_m" required>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">Add Movie</button>
+                        <a href="/admin" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <%- include('../partials/footer') %>
+</body>
+
+</html>

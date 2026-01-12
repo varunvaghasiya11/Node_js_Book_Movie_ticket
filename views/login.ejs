@@ -1,0 +1,36 @@
+<%- include('../partials/header') %>
+
+    <div class="container py-5 d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+        <div class="card bg-dark border-secondary p-4 shadow-lg" style="width: 100%; max-width: 400px;">
+            <h2 class="text-center fw-bold mb-4">Sign In</h2>
+
+            <% if (error) { %>
+                <div class="alert alert-danger" role="alert">
+                    <%= error %>
+                </div>
+                <% } %>
+
+                    <form action="/login" method="POST">
+                        <div class="mb-3">
+                            <label for="email" class="form-label text-secondary">Email address</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="password" class="form-label text-secondary">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Sign In</button>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <small class="text-secondary">New to MovieTicket? <a href="/register" class="text-white text-decoration-none">Sign up now</a></small>
+                    </div>
+                    <div class="text-center">
+                        <small class="text-secondary"><a href="/forget-password" class="text-white text-decoration-none">Forget Password?</a></small>
+                    </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>

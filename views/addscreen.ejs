@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+</head>
+
+<body>
+    <%- include('../partials/header') %>
+        <div class="container py-5 d-flex justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <h2 class="text-center mb-5 fw-bold"><span class="text-primary">Add</span> Screen</h2>
+                <form action="/addscreen" method="post" class="p-4 border border-secondary rounded bg-black shadow">
+
+                    <div class="mb-3">
+                        <label for="theaterId" class="form-label text-secondary">Select Theater</label>
+                        <select class="form-select bg-dark text-white border-secondary" id="theaterId" name="theaterId"
+                            required>
+                            <option value="" selected disabled>Choose a theater...</option>
+                            <% theaters.forEach(theater=> { %>
+                                <option value="<%= theater._id %>">
+                                    <%= theater.name %> - <%= theater.location %>
+                                </option>
+                                <% }); %>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="screenName" class="form-label text-secondary">Screen Name/Number</label>
+                        <input type="text" class="form-control" id="screenName" name="screenName"
+                            placeholder="e.g. Screen 1" required>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="capacity" class="form-label text-secondary">Capacity</label>
+                            <input type="number" class="form-control" id="capacity" name="capacity" min="1" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="screenType" class="form-label text-secondary">Screen Type</label>
+                            <select class="form-select bg-dark text-white border-secondary" id="screenType"
+                                name="screenType">
+                                <option value="Standard">Standard</option>
+                                <option value="IMAX">IMAX</option>
+                                <option value="VIP">VIP</option>
+                                <option value="4DX">4DX</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">Add Screen</button>
+                        <a href="/admin" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <%- include('../partials/footer') %>
+</body>
+
+</html>

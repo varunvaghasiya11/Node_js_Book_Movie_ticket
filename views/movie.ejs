@@ -1,0 +1,312 @@
+<%- include('../partials/header') %>
+
+    <div class="container py-5">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/" class="text-secondary text-decoration-none">Home</a></li>
+                <li class="breadcrumb-item active text-primary" aria-current="page">
+                    <%= movie.title %>
+                </li>
+            </ol>
+        </nav>
+
+        <div class="row mt-4 align-items-center">
+            <div class="col-md-4 mb-4 mb-md-0">
+                <img src="<%= movie.image %>" class="movie-poster-large rounded shadow-lg border border-secondary"
+                    alt="<%= movie.title %>">
+            </div>
+            <div class="col-md-8">
+                <h1 class="display-4 fw-bold mb-3">
+                    <%= movie.title %>
+                </h1>
+                <div class="d-flex align-items-center mb-4">
+                    <span class="badge bg-warning text-dark fs-6 me-3">IMDb <%= movie.rating %></span>
+                    <span class="text-secondary">
+                        <%= movie.runtime_h %>h <%= movie.runtime_m %>m &bull; <%= movie.genre %> &bull; 2026
+                    </span>
+                </div>
+
+                <h4 class="mb-3 text-white">Storyline</h4>
+                <p class="lead text-secondary text-opacity-75 mb-5">
+                    <%= movie.description %>
+                </p>
+
+                <div class="mb-5">
+                    <h3 class="mb-4 text-white border-bottom border-secondary pb-2">Showtimes</h3>
+
+                    <% const showsByTheater={}; if (shows && shows.length> 0) {
+                        shows.forEach(show => {
+                        if (show.screenId && show.screenId.theaterId)
+                        {
+                        const theater = show.screenId.theaterId;
+                        const theaterId = theater._id.toString();
+
+                        if (!showsByTheater[theaterId]) {
+                        showsByTheater[theaterId] = {
+                        details: theater,
+                        shows: []
+                        };
+                        }
+                        showsByTheater[theaterId].shows.push(show);
+                        }
+                        });
+                        }
+                        %>
+
+                        <% if (Object.keys(showsByTheater).length===0) { %>
+                            <div class="alert alert-warning bg-opacity-10 border border-warning text-warning">
+                                No shows available for this movie yet.
+                            </div>
+                            <% } else { %>
+                                <% for (const theaterId in showsByTheater) { %>
+                                    <div class="card bg-dark border-secondary mb-3">
+                                        <div class="card-header border-secondary bg-black bg-opacity-50">
+                                            <h5 class="mb-0 text-white">
+                                                <%= showsByTheater[theaterId].details.name %>
+                                                    <a href="<%= showsByTheater[theaterId].details.location %>"
+                                                        class="text-secondary fs-6 ms-2" target="_blank">
+                                                        <i class="bi bi-geo-alt"></i>
+                                                        <span>Location</span>
+                                                    </a>
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex flex-wrap gap-2">
+                                                <% showsByTheater[theaterId].shows.sort((a,b)=>
+                                                    a.showTime.localeCompare(b.showTime)).forEach(show => { %>
+                                                    <button type="button" class="btn btn-outline-light showtime-btn"
+                                                        data-screen="<%= show.screenId.screenName %>"
+                                                        data-price="<%= movie.price %>" data-show-id="<%= show._id %>">
+                                                        <%= show.showTime %>
+                                                    </button>
+                                                    <% }) %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                        <% } %>
+                </div>
+
+                <div class="mb-4">
+                    <div
+                        class="d-flex align-items-center justify-content-between p-3 bg-black rounded border border-secondary">
+                        <div>
+                            <small class="text-secondary d-block">Price per ticket</small>
+                            <span class="h3 mb-0 text-primary">₹<%= movie.price.toFixed(2) %></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="modal fade" id="seatModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content bg-dark text-white border-secondary">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                Select Seats — <span id="selectedTime" class="text-primary"></span>
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+
+
+                            <div class="text-center mb-3">
+                                <div class="screen">SCREEN</div>
+                            </div>
+
+
+                            <div class="seat-wrapper">
+                                <% for(let row of ['A','B','C','D','E']) { %>
+                                    <div class="seat-row">
+                                        <span class="row-label">
+                                            <%= row %>
+                                        </span>
+
+                                        <% for(let i=1; i<=6; i++) { %>
+                                            <div class="seat" data-seat="<%= row + i %>">
+                                                <span>
+                                                    <%= row + i %>
+                                                </span>
+                                            </div>
+                                            <% } %>
+                                    </div>
+                                    <% } %>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer justify-content-between">
+                            <div class="text-start">
+                                <small class="text-secondary d-block">Total Price</small>
+                                <span class="h4 mb-0 text-primary" id="totalPrice">₹0.00</span>
+                            </div>
+                            <div>
+                                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary confirm-seat">Confirm Seats</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%- include('../partials/footer') %>
+            <script>
+
+                document.addEventListener('DOMContentLoaded', () => {
+                    const showtimeBtns = document.querySelectorAll('.showtime-btn');
+                    const selectedTimeEl = document.getElementById('selectedTime');
+                    const seatModalElement = document.getElementById('seatModal');
+                    const totalPriceEl = document.getElementById('totalPrice');
+
+                    if (!seatModalElement) {
+                        console.warn('Seat modal element not found');
+                        return;
+                    }
+
+
+                    if (typeof bootstrap === 'undefined') {
+                        console.error('Bootstrap 5 JS is not loaded!');
+                        return;
+                    }
+
+                    const seatModal = new bootstrap.Modal(seatModalElement);
+                    const seatData = {};
+                    let currentTime = null;
+                    let currentScreen = null;
+                    let currentShowId = null;
+                    let currentPricePerSeat = 0;
+
+
+                    const updatePriceDisplay = () => {
+                        if (!currentTime || !seatData[currentTime]) {
+                            totalPriceEl.innerText = '₹0.00';
+                            return;
+                        }
+                        const count = seatData[currentTime].length;
+                        const total = count * currentPricePerSeat;
+                        totalPriceEl.innerText = `₹${total.toFixed(2)}`;
+                    };
+
+
+                    showtimeBtns.forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            e.preventDefault();
+
+
+                            const price = parseFloat(btn.getAttribute('data-price'));
+                            if (!isNaN(price)) {
+                                currentPricePerSeat = price;
+                            } else {
+                                currentPricePerSeat = 0;
+                            }
+
+                            showtimeBtns.forEach(b => b.classList.remove('active', 'btn-light'));
+                            showtimeBtns.forEach(b => b.classList.add('btn-outline-light'));
+
+                            btn.classList.add('active');
+                            btn.classList.remove('btn-outline-light');
+                            btn.classList.add('btn-light');
+
+                            currentTime = btn.innerText;
+                            currentScreen = btn.getAttribute('data-screen');
+                            currentShowId = btn.getAttribute('data-show-id');
+                            selectedTimeEl.innerText = currentTime;
+
+
+                            document.querySelectorAll('.seat').forEach(seat => {
+                                seat.classList.remove('selected');
+                            });
+
+
+                            if (!seatData[currentTime]) {
+                                seatData[currentTime] = [];
+                            }
+
+
+                            if (seatData[currentTime]) {
+                                seatData[currentTime].forEach(seatId => {
+                                    const seatEl = document.querySelector(`[data-seat="${seatId}"]`);
+                                    if (seatEl) seatEl.classList.add('selected');
+                                });
+                            }
+
+
+                            updatePriceDisplay();
+
+
+                            seatModal.show();
+                        });
+                    });
+
+
+                    document.querySelectorAll('.seat').forEach(seat => {
+                        seat.addEventListener('click', () => {
+                            if (!currentTime) return;
+
+                            seat.classList.toggle('selected');
+                            const seatId = seat.dataset.seat;
+
+                            if (!seatData[currentTime]) {
+                                seatData[currentTime] = [];
+                            }
+
+                            if (seat.classList.contains('selected')) {
+
+                                if (!seatData[currentTime].includes(seatId)) {
+                                    seatData[currentTime].push(seatId);
+                                }
+                            } else {
+
+                                seatData[currentTime] = seatData[currentTime].filter(s => s !== seatId);
+                            }
+
+
+                            updatePriceDisplay();
+                        });
+                    });
+                    const confirmSeatBtn = document.querySelector('.confirm-seat');
+
+                    if (confirmSeatBtn) {
+                        confirmSeatBtn.addEventListener('click', () => {
+                            if (!seatData[currentTime] || seatData[currentTime].length === 0) {
+                                alert('Please select at least one seat');
+                                return;
+                            }
+
+                            const seats = seatData[currentTime].join(', ');
+                            const total = (seatData[currentTime].length * currentPricePerSeat).toFixed(2);
+
+                            const form = document.createElement('form');
+                            form.method = 'post';
+                            form.action = '/confirmseat';
+
+                            const inputs = [
+                                { name: 'movieId', value: '<%= movie._id %>' },
+                                { name: 'movieTitle', value: '<%= movie.title %>' },
+                                { name: 'movieImage', value: '<%= movie.image %>' },
+                                { name: 'showTime', value: currentTime },
+                                { name: 'showId', value: currentShowId },
+                                { name: 'seats', value: seats },
+                                { name: 'screen', value: currentScreen },
+                                { name: 'totalPrice', value: total }
+                            ];
+
+                            inputs.forEach(inputData => {
+                                const input = document.createElement('input');
+                                input.type = 'hidden';
+                                input.name = inputData.name;
+                                input.value = inputData.value;
+                                form.appendChild(input);
+                            });
+
+                            document.body.appendChild(form);
+                            form.submit();
+                        });
+                    }
+                });
+            </script>

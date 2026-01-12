@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Show</title>
+</head>
+
+<body>
+    <%- include('../partials/header') %>
+        <div class="container py-5">
+            <h2 class="text-center mb-5 fw-bold"><span class="text-primary">Edit</span> Show</h2>
+            <form action="/editshow/<%= show._id %>" method="post">
+                <div class="mb-3">
+                    <label for="movieId" class="form-label text-secondary">Movie</label>
+                    <select class="form-select bg-dark text-white border-secondary" id="movieId" name="movieId"
+                        required>
+                        <option value="" disabled>Select Movie</option>
+                        <% movies.forEach(movie=> { %>
+                            <option value="<%= movie._id %>" <%=show.movieId.toString()===movie._id.toString()
+                                ? 'selected' : '' %>><%= movie.title %>
+                            </option>
+                            <% }) %>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="screenId" class="form-label text-secondary">Screen</label>
+                    <select class="form-select bg-dark text-white border-secondary" id="screenId" name="screenId"
+                        required>
+                        <option value="" disabled>Select Screen</option>
+                        <% screens.forEach(screen=> { %>
+                            <option value="<%= screen._id %>" <%=show.screenId.toString()===screen._id.toString()
+                                ? 'selected' : '' %>>
+                                <%= screen.screenName %> (<%= screen.theaterId.name %>)
+                            </option>
+                            <% }) %>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="showDate" class="form-label text-secondary">Date</label>
+                    <% // Format date to YYYY-MM-DD for input const date=new Date(show.showDate); const
+                        formattedDate=date.toISOString().split('T')[0]; %>
+                        <input type="date" class="form-control" id="showDate" name="showDate"
+                            value="<%= formattedDate %>" required>
+                </div>
+                <div class="mb-3">
+                    <label for="showTime" class="form-label text-secondary">Time</label>
+                    <input type="time" class="form-control" id="showTime" name="showTime" value="<%= show.showTime %>"
+                        required>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Show</button>
+                <a href="/admin" class="btn btn-outline-secondary">Cancel</a>
+            </form>
+        </div>
+        <%- include('../partials/footer') %>
+</body>
+
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Theater</title>
+</head>
+
+<body>
+    <%- include('../partials/header') %>
+        <div class="container py-5">
+            <h2 class="text-center mb-5 fw-bold"><span class="text-primary">Edit</span> Theater</h2>
+            <form action="/edittheater/<%= theater._id %>" method="post">
+                <div class="mb-3">
+                    <label for="title" class="form-label text-secondary">Theater Name</label>
+                    <input type="text" class="form-control" id="title" name="title" value="<%= theater.name %>"
+                        required>
+                </div>
+                <div class="mb-3">
+                    <label for="location" class="form-label text-secondary">Location</label>
+                    <input type="text" class="form-control" id="location" name="location"
+                        value="<%= theater.location %>" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Theater</button>
+                <a href="/admin" class="btn btn-outline-secondary">Cancel</a>
+            </form>
+        </div>
+        <%- include('../partials/footer') %>
+</body>
+
+</html>
