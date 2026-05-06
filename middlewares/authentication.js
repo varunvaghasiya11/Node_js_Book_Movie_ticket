@@ -9,6 +9,7 @@ const authentication = async (req, res, next) => {
     try {
         const user = await User.findById(token);
         if (!user) {
+            res.clearCookie('auth_token');
             return res.redirect('/login');
         }
 
@@ -20,6 +21,7 @@ const authentication = async (req, res, next) => {
         next();
     } catch (err) {
         console.error('Auth Middleware Error:', err);
+        res.clearCookie('auth_token');
         return res.redirect('/login');
     }
 };
@@ -33,6 +35,7 @@ const authenticationAdmin = async (req, res, next) => {
     try {
         const user = await User.findById(token);
         if (!user) {
+            res.clearCookie('auth_token');
             return res.redirect('/login');
         }
 
@@ -45,6 +48,7 @@ const authenticationAdmin = async (req, res, next) => {
         next();
     } catch (err) {
         console.error('Auth Admin Middleware Error:', err);
+        res.clearCookie('auth_token');
         return res.redirect('/login');
     }
 };

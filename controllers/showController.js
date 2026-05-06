@@ -59,7 +59,7 @@ const postConfirmSeat = async (req, res) => {
             service: 'gmail',
             auth: {
                 user: 'varunvaghasiya72@gmail.com',
-                pass: 'nenfmllxzwyycjrq'
+                pass: 'brldpmqphcnuvbqn'
             }
         });
 

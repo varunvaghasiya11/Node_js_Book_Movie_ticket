@@ -3,7 +3,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const connectDB = require('./config/db');
 const app = express();
-const port = 3000;
+const port = 5001;
 const mainRoutes = require('./routes/index');
 
 connectDB();
