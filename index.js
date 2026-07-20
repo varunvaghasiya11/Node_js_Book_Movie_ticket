@@ -1,4 +1,4 @@
-require('dotenv').config();
+const dotenv = require('dotenv');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -6,7 +6,7 @@ const connectDB = require('./config/db');
 const app = express();
 const port = 5001;
 const mainRoutes = require('./routes/index');
-
+dotenv.config();
 connectDB();
 
 app.use(express.urlencoded({ extended: true }));
