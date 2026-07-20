@@ -1,10 +1,10 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const connectDB = require('./config/db');
 const app = express();
 const port = 5001;
-require('dotenv').config();
 const mainRoutes = require('./routes/index');
 
 connectDB();
